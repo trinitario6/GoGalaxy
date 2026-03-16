@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>
-// On each page load, tell any waiting service worker to activate immediately.
-// No hardcoded version strings — the SW handles its own cache lifecycle.
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.ready.then(reg => {
-    if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-  });
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    // New SW has taken control — reload to get fresh HTML
-    window.location.reload();
-  });
-}
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
