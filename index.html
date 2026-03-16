@@ -1221,21 +1221,33 @@ function procRoll(r) {
   }
 }
 
-// ── Step sound — short space blip per movement increment ──
+// ── Shared AudioContext — created once on first use ──
+let _audioCtx = null;
+function getAudioCtx() {
+  if (!_audioCtx) {
+    _audioCtx = getAudioCtx();
+  }
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+
+// ── Step sound — space blip per movement increment ──
 function playStep(dir) {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
-    // Forward: ascending blip; backward (BH): descending blip
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(dir > 0 ? 520 : 280, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(dir > 0 ? 740 : 180, ctx.currentTime + 0.07);
-    gain.gain.setValueAtTime(0.12, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.10);
+    // Forward: quick ascending blip; backward (BH): descending
+    const f1 = dir > 0 ? 480 : 300;
+    const f2 = dir > 0 ? 800 : 160;
+    osc.frequency.setValueAtTime(f1, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(f2, ctx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.28, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.13);
     osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.12);
+    osc.stop(ctx.currentTime + 0.15);
   } catch(e) {}
 }
 
@@ -1269,7 +1281,7 @@ function chkLand(p, afterSetback) {
 // ── Black Hole scary sound — deep descending rumble + distortion ──
 function playBHScare() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx();
     // Deep descending tone
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -1307,7 +1319,7 @@ function playBHScare() {
 // ── Black Hole escape sound — relieved rising tone ──
 function playBHEscape() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx();
     // Relieved sigh — rising then settling
     [180, 240, 320, 400, 480].forEach((freq, i) => {
       const osc = ctx.createOscillator();
@@ -1386,7 +1398,7 @@ function closeBHEscPopup() {
 // ── Zoom sound (Web Audio API) ──
 function playZoom() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx();
     // Rising whoosh
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -1415,7 +1427,7 @@ function playZoom() {
 // ── Correct answer chime ──
 function playCorrect() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx();
     [523, 659, 784, 1047].forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
