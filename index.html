@@ -475,6 +475,21 @@ let players=[], curIdx=0, gameOn=false;
 let trivOn=false, curQ=null, pendBH=false;
 let showCO=true, pCount=3;
 const selP = {}; // populated lazily by renderNames
+let trivDeck=[], trivDeckIdx=0;
+
+function shuffleDeck() {
+  trivDeck = TRIVIA.slice();
+  for (let i=trivDeck.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [trivDeck[i],trivDeck[j]] = [trivDeck[j],trivDeck[i]];
+  }
+  trivDeckIdx = 0;
+}
+
+function nextQuestion() {
+  if (trivDeckIdx >= trivDeck.length) shuffleDeck();
+  return trivDeck[trivDeckIdx++];
+}
 
 // ════════════════════════════════════
 // SETUP
@@ -593,6 +608,7 @@ function startGame() {
     players.push({name, piece:selP[i]||APC[i], color:PCOLS[i], pos:0, id:i});
   }
   curIdx=0; gameOn=true; pendBH=false; showCO=true;
+  shuffleDeck(); // fresh randomised question order every game
   document.getElementById('ctb').classList.add('on');
   showSc('bs');
   renderBoard(); renderChips(); updateHUD();
@@ -783,19 +799,19 @@ function renderPlanets() {
       [-4,0,4].forEach(dy => g.appendChild(mk('ellipse',{cx:p.x,cy:p.y+dy,rx:p.r,ry:'2.5',fill:'rgba(100,50,0,0.18)'})));
       g.appendChild(mk('path',{d:`M${p.x-p.rx} ${p.y} A${p.rx} ${p.ry} 0 0 0 ${p.x+p.rx} ${p.y}`,
         fill:'none',stroke:'rgba(200,165,100,0.65)','stroke-width':'4.5'}));
-      lbl(g,p.x+p.rx+5,p.y+3,'start','8.5','rgba(200,165,100,0.65)','Saturn');
+      lbl(g,p.x,p.y-p.r-p.ry-6,'middle','8.5','rgba(200,165,100,0.65)','Saturn');
 
     } else if (p.type==='jupiter') {
       g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#c8a06a'}));
       [-7,-2,3,7].forEach(dy => g.appendChild(mk('ellipse',{cx:p.x,cy:p.y+dy,rx:p.r,ry:'2.8',
         fill:dy===-2?'rgba(148,48,18,0.44)':'rgba(80,40,10,0.20)'})));
       g.appendChild(mk('ellipse',{cx:p.x+7,cy:p.y-2,rx:'5.5',ry:'3.5',fill:'rgba(175,55,35,0.55)'}));
-      lbl(g,p.x-p.r-5,p.y+3,'end','8.5','rgba(200,160,80,0.65)','Jupiter');
+      lbl(g,p.x+p.r+5,p.y+3,'start','8.5','rgba(200,160,80,0.65)','Jupiter');
 
     } else if (p.type==='mars') {
       g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#c1440e'}));
       g.appendChild(mk('ellipse',{cx:p.x,cy:p.y-p.r+2,rx:'4',ry:'2',fill:'rgba(255,240,220,0.55)'}));
-      lbl(g,p.x+p.r+4,p.y+3,'start','8','rgba(200,100,60,0.65)','Mars');
+      lbl(g,p.x-p.r-4,p.y+3,'end','8','rgba(200,100,60,0.65)','Mars');
 
     } else if (p.type==='neptune') {
       g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#2c5eff'}));
@@ -805,7 +821,7 @@ function renderPlanets() {
     } else if (p.type==='earth') {
       g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#1a6db5'}));
       g.appendChild(mk('ellipse',{cx:p.x+2,cy:p.y-1,rx:'4.5',ry:'3.5',fill:'#2d8a3a',opacity:'0.8'}));
-      lbl(g,p.x+p.r+4,p.y+3,'start','8','rgba(80,200,100,0.65)','Earth');
+      lbl(g,p.x-p.r-4,p.y+3,'end','8','rgba(80,200,100,0.65)','Earth');
 
     } else if (p.type==='comet') {
       g.appendChild(mk('path',{d:`M${p.x} ${p.y} L${p.x+46} ${p.y+14}`,
@@ -995,7 +1011,7 @@ function closePO() {
 let trivRef=null, trivDone=false;
 function showTrivia(p) {
   trivOn=true; trivDone=false; trivRef=p;
-  const q=TRIVIA[Math.floor(Math.random()*TRIVIA.length)]; curQ=q;
+  const q=nextQuestion(); curQ=q;
   document.getElementById('tq').textContent=q.q;
   const cont=document.getElementById('tos'); cont.innerHTML='';
   ['A','B','C','D'].forEach((l,i)=>{
