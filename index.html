@@ -84,9 +84,9 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
   -webkit-appearance:none;appearance:none}
 .ni:focus{border-color:var(--teal)}
 .ni::placeholder{color:rgba(255,255,255,.32);font-weight:400}
-.pp{display:flex;gap:6px;flex-wrap:wrap;padding-top:2px}
-.pb{width:44px;height:44px;border-radius:12px;border:2px solid var(--brd);
-  background:rgba(255,255,255,.05);font-size:22px;cursor:pointer;
+.pp{display:flex;gap:4px;flex-wrap:nowrap;padding-top:2px;overflow:hidden}
+.pb{flex:1 1 0;min-width:0;max-width:44px;height:40px;border-radius:10px;border:2px solid var(--brd);
+  background:rgba(255,255,255,.05);font-size:19px;cursor:pointer;
   display:inline-flex;align-items:center;justify-content:center;
   -webkit-appearance:none;appearance:none;transition:all .15s}
 .pb.sel{border-color:var(--pink);background:rgba(224,64,251,.25);transform:scale(1.12);
@@ -522,7 +522,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
 // ════════════════════════════════════
 // CONSTANTS
 // ════════════════════════════════════
-const APC = ['🚀','🛸','🌙','⭐','🪐','🛰️','☄️','🌠'];
+const APC = ['🚀','🛸','🌙','⭐','🪐','🛰️','☄️','👾'];
 const PCOLS = ['#60c0ff','#e040fb','#ffd700','#39ff14'];
 const DICE = ['⚀','⚁','⚂','⚃','⚄','⚅'];
 
@@ -684,7 +684,7 @@ function renderNames() {
       btn.type = 'button';
       btn.textContent = piece;
       btn.className = 'pb' + (isMine ? ' sel' : takenByOther ? ' tk' : '');
-      btn.style.cssText = 'width:44px;height:44px;font-size:22px';
+      btn.style.cssText = 'height:40px';
 
       // Capture i and piece in closure
       (function(playerIdx, p) {
