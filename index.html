@@ -118,8 +118,8 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
 #bs.on{display:flex}
 
 .hud{width:100%;background:rgba(5,5,18,.97);border-bottom:1px solid var(--brd);
-  padding:8px 14px;display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;min-height:48px}
+  padding:5px 12px;display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;min-height:40px}
 .ht{font-family:var(--fh);font-size:19px;
   background:linear-gradient(135deg,var(--gold),var(--pink));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -134,7 +134,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
   -webkit-appearance:none}
 .ctb.on{border-color:var(--gold);background:rgba(255,215,0,.18);box-shadow:0 0 10px rgba(255,215,0,.32)}
 
-.chips{width:100%;padding:6px 12px;display:flex;gap:7px;overflow-x:auto;
+.chips{width:100%;padding:3px 10px;display:flex;gap:6px;overflow-x:auto;
   scrollbar-width:none;flex-shrink:0;-webkit-overflow-scrolling:touch}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;background:var(--card);
@@ -145,24 +145,24 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
 
 
 
-.bw{flex:1;min-height:0;padding:3px 8px;overflow:auto;
+.bw{flex:1;min-height:0;padding:2px 6px;overflow:auto;
   -webkit-overflow-scrolling:touch;display:flex;
   align-items:flex-start;justify-content:center;
   touch-action:pan-x pan-y pinch-zoom}
 .bw-inner{width:100%;transform-origin:top center}
 #bsvg{width:100%;height:auto;display:block;border-radius:14px}
 
-.aa{width:100%;padding:0 14px 10px;flex-shrink:0}
-.dd{text-align:center;font-size:58px;height:68px;
+.aa{width:100%;padding:0 10px 6px;flex-shrink:0}
+.dd{text-align:center;font-size:44px;height:50px;
   display:flex;align-items:center;justify-content:center}
 .dd.r{animation:dr .55s ease-out}
-.mb{background:var(--card);border:1px solid var(--brd);border-radius:14px;
-  padding:10px 14px;text-align:center;font-weight:700;font-size:14px;
-  margin-bottom:10px;min-height:46px;display:flex;align-items:center;justify-content:center;line-height:1.35}
-.rb{width:100%;padding:17px;border-radius:18px;border:none;
+.mb{background:var(--card);border:1px solid var(--brd);border-radius:12px;
+  padding:7px 12px;text-align:center;font-weight:700;font-size:13px;
+  margin-bottom:7px;min-height:36px;display:flex;align-items:center;justify-content:center;line-height:1.3}
+.rb{width:100%;padding:12px;border-radius:14px;border:none;
   background:linear-gradient(135deg,#1d4ed8,var(--teal));color:#fff;
-  font-family:var(--fh);font-size:24px;cursor:pointer;
-  box-shadow:0 6px 22px rgba(29,78,216,.5);
+  font-family:var(--fh);font-size:20px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(29,78,216,.5);
   display:flex;align-items:center;justify-content:center;gap:9px;
   -webkit-appearance:none;min-height:56px;transition:all .2s}
 .rb:active{transform:scale(.96)}
@@ -363,7 +363,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
 
   <div class="bw" id="bwrap">
     <div class="bw-inner" id="bwinner">
-    <svg id="bsvg" viewBox="0 0 380 720" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <svg id="bsvg" viewBox="0 0 380 560" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
       <defs>
         <radialGradient id="bgG" cx="50%" cy="55%" r="80%">
           <stop offset="0%" stop-color="#0e0b2a"/>
@@ -410,7 +410,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
         </filter>
       </defs>
       <!-- background -->
-      <rect width="380" height="720" fill="url(#bgG)" rx="14"/>
+      <rect width="380" height="560" fill="url(#bgG)" rx="14"/>
       <!-- nebula washes -->
       <ellipse cx="68" cy="110" rx="70" ry="34" fill="#3b1070" opacity=".09"/>
       <ellipse cx="305" cy="310" rx="58" ry="42" fill="#102060" opacity=".09"/>
@@ -464,7 +464,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
   <div class="burst" id="burst"></div>
   <span class="wpe" id="wpe">🚀</span>
   <span class="we">🌟</span>
-  <div class="wt">You Made It!</div>
+  <div class="wt" id="wt">You Made It!</div>
   <div class="wn" id="wn">Player</div>
   <div class="ws2">Reached Alpha Centauri first! 🎉<br>Greatest explorer in the galaxy!</div>
   <button class="pa" onclick="resetGame()">🔄 Play Again</button>
@@ -575,29 +575,29 @@ const TRIVIA = [
 const RAW = [
   // 7 bands ~82px apart. Launch Pad separated from Spot 1.
   // All 8 planets + sun clear by ≥13px. Zero path crossings. Verified.
-  [18,715],   // 0  Launch Pad (well separated from Spot 1 at [68,673])
-  [68,673],[116,660],[164,647],[212,660],[260,673],[308,660],        // 1-6   L→R
-  [298,583],[260,568],[221,573],[183,588],[145,583],[106,568],[68,573], // 7-13  R←L
-  [94,506],[130,492],[165,486],[201,500],[237,506],[272,492],[308,486], // 14-20 L→R
-  [278,423],[247,406],[217,405],[186,422],[156,423],[125,406],[95,405],[64,422], // 21-28 R←L
-  [64,343],[105,330],[145,321],[186,334],[227,343],[267,330],[308,321], // 29-35 L→R
-  [308,258],[281,246],[254,242],[228,254],[201,258],[174,246],[148,242],[121,254],[94,258], // 36-44 R←L
-  [68,177],[116,165],[164,159],[212,171],[260,177],[308,165],          // 45-50 L→R
-  [192,72]    // 51  FINISH — Alpha Centauri
+  [18,545],   // 0  Launch Pad (well separated from Spot 1 at [68,513])
+  [68,513],[116,503],[164,493],[212,503],[260,513],[308,503],        // 1-6   L→R
+  [298,444],[260,433],[221,437],[183,448],[145,444],[106,433],[68,437], // 7-13  R←L
+  [94,386],[130,375],[165,370],[201,381],[237,386],[272,375],[308,370], // 14-20 L→R
+  [278,322],[247,310],[217,309],[186,322],[156,322],[125,310],[95,309],[64,322], // 21-28 R←L
+  [64,262],[105,252],[145,245],[186,255],[227,262],[267,252],[308,245], // 29-35 L→R
+  [308,197],[281,188],[254,185],[228,194],[201,197],[174,188],[148,185],[121,194],[94,197], // 36-44 R←L
+  [68,135],[116,126],[164,121],[212,130],[260,135],[308,126],          // 45-50 L→R
+  [192,55]    // 51  FINISH — Alpha Centauri
 ];
 const ALLPOS = RAW.map(([x,y]) => ({x,y}));
 
 const PLANETS = [
-  {x:192,y:695,r:28, type:'sun'},        // below all bands, bottom centre
-  {x:50, y:638,r:7,  type:'mercury'},    // left, band1 zone (tiny)
-  {x:192,y:622,r:22, type:'jupiter'},    // centre between band1-2
-  {x:340,y:532,r:10, type:'earth'},      // right between band2-3
-  {x:340,y:455,r:13, type:'venus'},      // right between band3-4
-  {x:50, y:372,r:10, type:'mars'},       // left between band4-5
-  {x:348,y:335,r:20, type:'saturn', rx:30, ry:7}, // right between band4-5
-  {x:50, y:209,r:15, type:'uranus'},     // left between band6-7
-  {x:330,y:209,r:13, type:'neptune'},    // right between band6-7
-  {x:145,y:78,       type:'comet'},      // upper area
+  {x:192,y:530,r:28, type:'sun'},        // below all bands, bottom centre
+  {x:50, y:486,r:7,  type:'mercury'},    // left, band1 zone (tiny)
+  {x:192,y:474,r:22, type:'jupiter'},    // centre between band1-2
+  {x:340,y:406,r:10, type:'earth'},      // right between band2-3
+  {x:340,y:347,r:13, type:'venus'},      // right between band3-4
+  {x:50, y:284,r:10, type:'mars'},       // left between band4-5
+  {x:348,y:255,r:20, type:'saturn', rx:30, ry:5}, // right between band4-5
+  {x:50, y:159,r:15, type:'uranus'},     // left between band6-7
+  {x:330,y:159,r:13, type:'neptune'},    // right between band6-7
+  {x:145,y:60,       type:'comet'},      // upper area
 ];
 
 // ════════════════════════════════════
@@ -893,15 +893,11 @@ function renderPath() {
         opacity:'0.44',transform:`rotate(-14,${x},${y})`}));
       g.appendChild(mk('circle',{cx:x,cy:y,r:hR*0.60,fill:'#000'}));
       g.appendChild(mk('circle',{cx:x-3,cy:y-4,r:'1.2',fill:'rgba(255,240,180,0.45)'}));
-      g.appendChild(txt(x,y,i,{'font-size':'7.5','font-family':'Nunito,sans-serif',
-        'font-weight':'900',fill:'rgba(255,160,50,0.9)'}));
 
     } else if (type === 'nb') {
       g.appendChild(mk('circle',{cx:x,cy:y,r:'18',fill:'url(#nbG)'}));
       g.appendChild(mk('circle',{cx:x,cy:y,r:'12',fill:'#2d0055',
         stroke:'#c084fc','stroke-width':'2',filter:'url(#glo)'}));
-      g.appendChild(txt(x,y,i,{'font-size':'7.5','font-family':'Nunito,sans-serif',
-        'font-weight':'900',fill:'#e0aaff'}));
 
     } else if (type === 'sb') {
       // Sebby face circle with number
@@ -916,9 +912,6 @@ function renderPath() {
         stroke:'#39ff14','stroke-width':'2',filter:'url(#glo)'}));
       g.appendChild(mk('image',{href:SEBBY,x:x-13,y:y-13,
         width:'26',height:'26','clip-path':'url(#'+cpId+')'}));
-      g.appendChild(txt(x+8,y+9,i,{'font-size':'7','font-family':'Nunito,sans-serif',
-        'font-weight':'900',fill:'#39ff14','stroke':'#000','stroke-width':'2.5',
-        'paint-order':'stroke'}));
 
     } else if (i === 50) {
       g.appendChild(mk('circle',{cx:x,cy:y,r:'12',fill:'#0a1a30',
@@ -1473,17 +1466,31 @@ function showTrivia(p) {
   trivOn=true; trivDone=false; trivRef=p;
   const q=nextQuestion(); curQ=q;
   if (isComputer(p)) {
-    // Computer always answers correctly — it's a computer!
+    // Show trivia card so player can see question & answer, then auto-answer correctly
     setMsg('🌌 Nebula Card! 🤖 Computer is answering…');
+    document.getElementById('tq').textContent = q.q;
+    const cont = document.getElementById('tos'); cont.innerHTML = '';
+    ['A','B','C','D'].forEach((l, ai) => {
+      const b = document.createElement('button');
+      b.className = 'ob'; b.type = 'button';
+      b.innerHTML = `<span class="ol">${l}</span>${q.opts[ai]}`;
+      cont.appendChild(b);
+    });
+    document.getElementById('tov').classList.add('on');
+    // Auto-select correct answer after 2s so player can read it
     setTimeout(() => {
-      document.getElementById('tov').classList.remove('on');
-      trivOn = false;
       trivDone = true;
-      showCorrectPopupOrAuto(p, () => {
-        setMsg('🎲 Computer rolls again! Bonus!');
-        setTimeout(() => rollDice(), 600);
+      document.querySelectorAll('.ob').forEach((b, ai) => {
+        if (ai === q.a) b.classList.add('cor');
       });
-    }, 1800);
+      setTimeout(() => {
+        document.getElementById('tov').classList.remove('on'); trivOn = false;
+        showCorrectPopupOrAuto(p, () => {
+          setMsg('🎲 Computer rolls again! Bonus!');
+          setTimeout(() => rollDice(), 600);
+        });
+      }, 1500);
+    }, 2200);
     return;
   }
   document.getElementById('tq').textContent=q.q;
@@ -1524,7 +1531,11 @@ function winGame(p) {
   gameOn=false;
   document.getElementById('wpe').textContent=p.piece;
   document.getElementById('wn').textContent=p.name;
-  showSc('winsc'); confetti();
+  const isComp = isComputer(p);
+  document.getElementById('wt').textContent = isComp ? 'Computer Won!' : 'You Made It!';
+  document.getElementById('burst').style.display = isComp ? 'none' : '';
+  showSc('winsc');
+  if (!isComp) confetti();
 }
 function confetti() {
   const b=document.getElementById('burst'); b.innerHTML='';
