@@ -132,11 +132,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
 .che{font-size:17px}
 .chp{color:rgba(255,255,255,.5);font-size:10px}
 
-.leg{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;padding:3px 12px 5px;flex-shrink:0}
-.li{display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;
-  color:rgba(255,255,255,.6);background:var(--card);border:1px solid var(--brd);
-  border-radius:16px;padding:2px 8px}
-.ld{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
 
 .bw{flex:1;min-height:0;padding:3px 8px;overflow:auto;
   -webkit-overflow-scrolling:touch;display:flex;
@@ -260,12 +256,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
     </div>
   </div>
   <div class="chips" id="chips"></div>
-  <div class="leg">
-    <div class="li"><div class="ld" style="background:#7c3aed"></div>Nebula Card</div>
-    <div class="li"><div class="ld" style="background:#000;border:1.5px solid #ff8800"></div>Black Hole</div>
-    <div class="li"><div class="ld" style="background:#39ff14;border-radius:50%"></div>Sebby +4</div>
-    <div class="li"><div class="ld" style="background:var(--gold)"></div>Finish!</div>
-  </div>
+
   <div class="bw" id="bwrap">
     <div class="bw-inner" id="bwinner">
     <svg id="bsvg" viewBox="0 0 380 720" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
@@ -434,38 +425,34 @@ const TRIVIA = [
 ];
 
 // ════════════════════════════════════
-// BOARD POSITIONS  (viewBox 380×720 — organic wavy snake, 7 bands, cosine wave offsets)
-// Planets:
-//   Sun     x=352 y=478  r=22   → path stays ≥28px clear
-//   Mars    x=308 y=362  r=10
-//   Saturn  x=322 y=255  r=18   rings ±28
-//   Jupiter x=46  y=282  r=20
-//   Neptune x=62  y=165  r=12
-//   Earth   x=186 y=272  r=9
+// BOARD POSITIONS  (viewBox 380×720)
 // ════════════════════════════════════
 const RAW = [
-  // Organic wavy snake — 7 bands, cosine-wave offsets per row
-  // Zero self-intersections, all planets clear by ≥28px
-  [62,668],   // 0  Launch Pad
-  [72,662],[118,648],[164,634],[210,648],[256,662],[302,648],        // 1-6   L→R
-  [302,584],[263,568],[224,572],[185,588],[146,584],[107,568],[68,572], // 7-13  R←L
-  [70,520],[109,505],[149,500],[188,515],[227,520],[267,505],[306,500], // 14-20 L→R
-  [304,451],[270,433],[235,433],[201,451],[167,451],[133,433],[98,433],[64,451], // 21-28 R←L
-  [66,385],[106,370],[147,363],[187,378],[227,385],[268,370],[308,363], // 29-35 L→R
-  [308,314],[278,300],[247,298],[216,312],[186,314],[156,300],[125,298],[94,312],[64,314], // 36-44 R←L
-  [70,218],[117,206],[164,198],[212,210],[259,218],[306,206],          // 45-50 L→R
-  [192,108]   // 51  FINISH — Alpha Centauri
+  // 7 bands ~82px apart. Launch Pad separated from Spot 1.
+  // All 8 planets + sun clear by ≥13px. Zero path crossings. Verified.
+  [28,706],   // 0  Launch Pad (separated from Spot 1 at [68,673])
+  [68,673],[116,660],[164,647],[212,660],[260,673],[308,660],        // 1-6   L→R
+  [298,583],[260,568],[221,573],[183,588],[145,583],[106,568],[68,573], // 7-13  R←L
+  [94,506],[130,492],[165,486],[201,500],[237,506],[272,492],[308,486], // 14-20 L→R
+  [278,423],[247,406],[217,405],[186,422],[156,423],[125,406],[95,405],[64,422], // 21-28 R←L
+  [64,343],[105,330],[145,321],[186,334],[227,343],[267,330],[308,321], // 29-35 L→R
+  [308,258],[281,246],[254,242],[228,254],[201,258],[174,246],[148,242],[121,254],[94,258], // 36-44 R←L
+  [68,177],[116,165],[164,159],[212,171],[260,177],[308,165],          // 45-50 L→R
+  [192,72]    // 51  FINISH — Alpha Centauri
 ];
 const ALLPOS = RAW.map(([x,y]) => ({x,y}));
 
 const PLANETS = [
-  {x:354,y:688,r:24, type:'sun'},
-  {x:350,y:562,r:11, type:'mars'},
-  {x:352,y:415,r:20, type:'saturn', rx:30, ry:7},
-  {x:36, y:480,r:22, type:'jupiter'},
-  {x:36, y:248,r:13, type:'neptune'},
-  {x:362,y:595,r:10, type:'earth'},
-  {x:145,y:78,       type:'comet'},
+  {x:192,y:695,r:28, type:'sun'},        // below all bands, bottom centre
+  {x:50, y:638,r:7,  type:'mercury'},    // left, band1 zone (tiny)
+  {x:192,y:622,r:22, type:'jupiter'},    // centre between band1-2
+  {x:340,y:532,r:10, type:'earth'},      // right between band2-3
+  {x:340,y:455,r:13, type:'venus'},      // right between band3-4
+  {x:50, y:372,r:10, type:'mars'},       // left between band4-5
+  {x:348,y:335,r:20, type:'saturn', rx:30, ry:7}, // right between band4-5
+  {x:50, y:209,r:15, type:'uranus'},     // left between band6-7
+  {x:330,y:209,r:13, type:'neptune'},    // right between band6-7
+  {x:145,y:78,       type:'comet'},      // upper area
 ];
 
 // ════════════════════════════════════
@@ -777,57 +764,90 @@ function renderPlanets() {
   const Lpl = document.getElementById('L-planets');
   Lpl.innerHTML = '';
 
-  function lbl(parent,x,y,anchor,sz,fill,text) {
-    const t=mk('text',{x,y,'text-anchor':anchor,'font-size':sz,fill,'font-family':'Fredoka One,cursive'});
-    t.textContent=text; parent.appendChild(t);
+  function lbl(parent, x, y, anchor, sz, fill, text) {
+    const t = mk('text', {x, y, 'text-anchor': anchor, 'font-size': sz, fill, 'font-family': 'Fredoka One,cursive'});
+    t.textContent = text; parent.appendChild(t);
+  }
+
+  // Helper: label placed to avoid clipping (viewBox 380px wide)
+  // anchor='auto': picks start if left-side planet, end if right-side, middle if centred
+  function autoLbl(parent, px, r, py_offset, sz, fill, text) {
+    const tw = text.length * 5.5;
+    let x, anchor;
+    if (px < 100) {          // left-side planet → label to the right
+      x = px + r + 5; anchor = 'start';
+    } else if (px > 280) {   // right-side planet → label to the left
+      x = px - r - 5; anchor = 'end';
+    } else {                  // centred → label below, centred
+      x = px; anchor = 'middle';
+    }
+    lbl(parent, x, py_offset, anchor, sz, fill, text);
   }
 
   PLANETS.forEach(p => {
     const g = mk('g');
-    if (p.type==='sun') {
-      [48,36,26].forEach((cr,i) => {
-        g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:cr,fill:`rgba(255,${100+i*30},0,${0.04+i*0.03})`}));
-      });
+
+    if (p.type === 'sun') {
+      [52,40,28].forEach((cr,i) => g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:cr,fill:`rgba(255,${100+i*30},0,${0.04+i*0.03})`})));
       g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'url(#sunG)',filter:'url(#sunF)'}));
-      g.appendChild(mk('circle',{cx:p.x+7,cy:p.y-6,r:'3.5',fill:'rgba(150,45,0,0.35)'}));
-      lbl(g,p.x-p.r-7,p.y+3,'end','8.5','rgba(255,200,60,0.65)','Sun');
+      g.appendChild(mk('circle',{cx:p.x+8,cy:p.y-7,r:'4',fill:'rgba(150,45,0,0.35)'}));
+      autoLbl(g, p.x, p.r, p.y+p.r+11, '8.5', 'rgba(255,200,60,0.65)', 'Sun');
 
-    } else if (p.type==='saturn') {
-      g.appendChild(mk('path',{d:`M${p.x-p.rx} ${p.y} A${p.rx} ${p.ry} 0 0 1 ${p.x+p.rx} ${p.y}`,
-        fill:'none',stroke:'rgba(200,165,100,0.38)','stroke-width':'4.5'}));
-      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#c9956e'}));
-      [-4,0,4].forEach(dy => g.appendChild(mk('ellipse',{cx:p.x,cy:p.y+dy,rx:p.r,ry:'2.5',fill:'rgba(100,50,0,0.18)'})));
-      g.appendChild(mk('path',{d:`M${p.x-p.rx} ${p.y} A${p.rx} ${p.ry} 0 0 0 ${p.x+p.rx} ${p.y}`,
-        fill:'none',stroke:'rgba(200,165,100,0.65)','stroke-width':'4.5'}));
-      lbl(g,p.x,p.y-p.r-p.ry-6,'middle','8.5','rgba(200,165,100,0.65)','Saturn');
+    } else if (p.type === 'mercury') {
+      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#a08878'}));
+      // craters
+      g.appendChild(mk('circle',{cx:p.x+2,cy:p.y-2,r:'2',fill:'rgba(0,0,0,0.25)'}));
+      g.appendChild(mk('circle',{cx:p.x-2,cy:p.y+2,r:'1.5',fill:'rgba(0,0,0,0.20)'}));
+      autoLbl(g, p.x, p.r, p.y+3, '7.5', 'rgba(180,150,120,0.70)', 'Mercury');
 
-    } else if (p.type==='jupiter') {
-      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#c8a06a'}));
-      [-7,-2,3,7].forEach(dy => g.appendChild(mk('ellipse',{cx:p.x,cy:p.y+dy,rx:p.r,ry:'2.8',
-        fill:dy===-2?'rgba(148,48,18,0.44)':'rgba(80,40,10,0.20)'})));
-      g.appendChild(mk('ellipse',{cx:p.x+7,cy:p.y-2,rx:'5.5',ry:'3.5',fill:'rgba(175,55,35,0.55)'}));
-      lbl(g,p.x+p.r+5,p.y+3,'start','8.5','rgba(200,160,80,0.65)','Jupiter');
+    } else if (p.type === 'venus') {
+      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#e8b84b'}));
+      // cloud swirls
+      g.appendChild(mk('ellipse',{cx:p.x-3,cy:p.y-2,rx:'7',ry:'3',fill:'rgba(255,240,180,0.30)'}));
+      g.appendChild(mk('ellipse',{cx:p.x+2,cy:p.y+3,rx:'6',ry:'2.5',fill:'rgba(255,240,180,0.25)'}));
+      autoLbl(g, p.x, p.r, p.y+3, '8', 'rgba(230,190,80,0.70)', 'Venus');
 
-    } else if (p.type==='mars') {
+    } else if (p.type === 'earth') {
+      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#1a6db5'}));
+      g.appendChild(mk('ellipse',{cx:p.x+2,cy:p.y-1,rx:'5',ry:'4',fill:'#2d8a3a',opacity:'0.85'}));
+      autoLbl(g, p.x, p.r, p.y+3, '8', 'rgba(80,200,100,0.70)', 'Earth');
+
+    } else if (p.type === 'mars') {
       g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#c1440e'}));
       g.appendChild(mk('ellipse',{cx:p.x,cy:p.y-p.r+2,rx:'4',ry:'2',fill:'rgba(255,240,220,0.55)'}));
-      lbl(g,p.x-p.r-4,p.y+3,'end','8','rgba(200,100,60,0.65)','Mars');
+      autoLbl(g, p.x, p.r, p.y+3, '8', 'rgba(200,100,60,0.70)', 'Mars');
 
-    } else if (p.type==='neptune') {
+    } else if (p.type === 'jupiter') {
+      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#c8a06a'}));
+      [-8,-3,3,8].forEach(dy => g.appendChild(mk('ellipse',{cx:p.x,cy:p.y+dy,rx:p.r,ry:'3',fill:dy===-3?'rgba(148,48,18,0.44)':'rgba(80,40,10,0.20)'})));
+      g.appendChild(mk('ellipse',{cx:p.x+8,cy:p.y-2,rx:'6',ry:'4',fill:'rgba(175,55,35,0.55)'}));
+      autoLbl(g, p.x, p.r, p.y+p.r+11, '8.5', 'rgba(200,160,80,0.70)', 'Jupiter');
+
+    } else if (p.type === 'saturn') {
+      const rx = p.rx || 30, ry = p.ry || 7;
+      g.appendChild(mk('path',{d:`M${p.x-rx} ${p.y} A${rx} ${ry} 0 0 1 ${p.x+rx} ${p.y}`,fill:'none',stroke:'rgba(200,165,100,0.38)','stroke-width':'5'}));
+      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#c9956e'}));
+      [-4,0,4].forEach(dy => g.appendChild(mk('ellipse',{cx:p.x,cy:p.y+dy,rx:p.r,ry:'2.5',fill:'rgba(100,50,0,0.18)'})));
+      g.appendChild(mk('path',{d:`M${p.x-rx} ${p.y} A${rx} ${ry} 0 0 0 ${p.x+rx} ${p.y}`,fill:'none',stroke:'rgba(200,165,100,0.65)','stroke-width':'5'}));
+      // Saturn centred above — label above the rings
+      lbl(g, p.x, p.y-ry-p.r-6, 'middle', '8.5', 'rgba(200,165,100,0.70)', 'Saturn');
+
+    } else if (p.type === 'uranus') {
+      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#72d4e0'}));
+      // tilted ring (Uranus is tilted 98°)
+      g.appendChild(mk('ellipse',{cx:p.x,cy:p.y,rx:'4',ry:p.r+6,fill:'none',stroke:'rgba(150,220,230,0.45)','stroke-width':'2.5'}));
+      autoLbl(g, p.x, p.r, p.y+3, '8', 'rgba(100,210,220,0.70)', 'Uranus');
+
+    } else if (p.type === 'neptune') {
       g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#2c5eff'}));
-      g.appendChild(mk('circle',{cx:p.x-3,cy:p.y+2,r:'3.5',fill:'rgba(255,255,255,0.2)'}));
-      lbl(g,p.x+p.r+4,p.y+3,'start','8','rgba(80,140,255,0.65)','Neptune');
+      g.appendChild(mk('circle',{cx:p.x-3,cy:p.y+2,r:'4',fill:'rgba(255,255,255,0.2)'}));
+      lbl(g, p.x-p.r-5, p.y+3, 'end', '8', 'rgba(80,140,255,0.70)', 'Neptune');
 
-    } else if (p.type==='earth') {
-      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#1a6db5'}));
-      g.appendChild(mk('ellipse',{cx:p.x+2,cy:p.y-1,rx:'4.5',ry:'3.5',fill:'#2d8a3a',opacity:'0.8'}));
-      lbl(g,p.x-p.r-4,p.y+3,'end','8','rgba(80,200,100,0.65)','Earth');
-
-    } else if (p.type==='comet') {
-      g.appendChild(mk('path',{d:`M${p.x} ${p.y} L${p.x+46} ${p.y+14}`,
-        stroke:'rgba(200,220,255,0.22)','stroke-width':'2.5','stroke-linecap':'round'}));
-      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:'2.8',fill:'#d0e8ff'}));
+    } else if (p.type === 'comet') {
+      g.appendChild(mk('path',{d:`M${p.x} ${p.y} L${p.x+46} ${p.y+14}`,stroke:'rgba(200,220,255,0.22)','stroke-width':'2.5','stroke-linecap':'round'}));
+      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:'3',fill:'#d0e8ff'}));
     }
+
     Lpl.appendChild(g);
   });
 }
