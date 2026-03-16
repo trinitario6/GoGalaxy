@@ -567,6 +567,27 @@ const TRIVIA = [
   {q:"What is a planet's path around the Sun called?", opts:["A rotation","An orbit","A revolution","A trajectory"], a:1},
   {q:"Which planet is the hottest in our solar system?", opts:["Mercury","Mars","Venus","Jupiter"], a:2},
   {q:"Name NASA's famous orbiting space telescope.", opts:["Galileo","Hubble","Newton","Kepler"], a:1},
+  // ── 20 new questions ──
+  {q:"What is the name of the force that keeps planets orbiting the Sun?", opts:["Magnetism","Gravity","Friction","Electricity"], a:1},
+  {q:"Which planet is the smallest in our solar system?", opts:["Mars","Pluto","Mercury","Venus"], a:2},
+  {q:"What do you call a rock that lands on Earth from space?", opts:["Asteroid","Meteor","Meteorite","Comet"], a:2},
+  {q:"How many Earth days does it take Mars to orbit the Sun?", opts:["365","687","500","900"], a:1},
+  {q:"What is the name of the first animal sent to space?", opts:["A monkey","A dog","A cat","A rabbit"], a:1},
+  {q:"Which planet has the most moons?", opts:["Jupiter","Saturn","Uranus","Neptune"], a:1},
+  {q:"What is the bright trail behind a comet called?", opts:["A ring","A nebula","A tail","A halo"], a:2},
+  {q:"What layer of gas surrounds the Earth?", opts:["The stratosphere","The atmosphere","The lithosphere","The hydrosphere"], a:1},
+  {q:"Who was the first human to walk on the Moon?", opts:["Buzz Aldrin","Yuri Gagarin","Neil Armstrong","John Glenn"], a:2},
+  {q:"What year did humans first land on the Moon?", opts:["1959","1965","1969","1972"], a:2},
+  {q:"What is the largest volcano in our solar system?", opts:["Mount Everest","Olympus Mons","Mauna Kea","Vesuvius"], a:1},
+  {q:"What colour is Mars?", opts:["Blue","Green","Yellow","Red"], a:3},
+  {q:"Which planet is famous for its beautiful rings made of ice and rock?", opts:["Uranus","Neptune","Jupiter","Saturn"], a:3},
+  {q:"What is the centre of our solar system?", opts:["Earth","The Moon","The Sun","Jupiter"], a:2},
+  {q:"How long does light from the Sun take to reach Earth?", opts:["1 second","8 minutes","1 hour","1 day"], a:1},
+  {q:"What spacecraft first left our solar system?", opts:["Apollo 11","Voyager 1","Cassini","New Horizons"], a:1},
+  {q:"Which planet rotates backwards compared to most others?", opts:["Mars","Mercury","Venus","Neptune"], a:2},
+  {q:"What is the asteroid belt mostly located between?", opts:["Earth and Mars","Mars and Jupiter","Jupiter and Saturn","Saturn and Uranus"], a:1},
+  {q:"What do astronauts use to move around outside the space station?", opts:["Jet boots","A tether and thrusters","Magnetic boots","A space scooter"], a:1},
+  {q:"What is the name of the galaxy closest to our Milky Way?", opts:["Triangulum","Whirlpool","Andromeda","Sombrero"], a:2},
 ];
 
 // ════════════════════════════════════
@@ -898,6 +919,10 @@ function renderPath() {
       g.appendChild(mk('circle',{cx:x,cy:y,r:'18',fill:'url(#nbG)'}));
       g.appendChild(mk('circle',{cx:x,cy:y,r:'12',fill:'#2d0055',
         stroke:'#c084fc','stroke-width':'2',filter:'url(#glo)'}));
+      // Purple diamond indicator
+      g.appendChild(mk('polygon',{
+        points:`${x},${y-6} ${x+5},${y} ${x},${y+6} ${x-5},${y}`,
+        fill:'#c084fc',opacity:'0.9'}));
 
     } else if (type === 'sb') {
       // Sebby face circle with number
