@@ -179,6 +179,52 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
 .ob.wrg{border-color:#ff4444;background:rgba(255,68,68,.15);color:#ff8888}
 .ol{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.12);
   display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0}
+/* Sebby boost popup */
+.sebby-pop{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.75);
+  display:none;align-items:center;justify-content:center;padding:20px}
+.sebby-pop.on{display:flex}
+.sebby-card{background:linear-gradient(145deg,#001a00,#003300);
+  border:3px solid var(--green);border-radius:28px;padding:32px 24px;
+  width:100%;max-width:360px;text-align:center;
+  box-shadow:0 0 80px rgba(57,255,20,.5);
+  animation:sebbyPop .5s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes sebbyPop{
+  0%{transform:scale(0.3) rotate(-10deg);opacity:0}
+  60%{transform:scale(1.12) rotate(3deg);opacity:1}
+  100%{transform:scale(1) rotate(0deg);opacity:1}}
+.sebby-emoji{font-size:72px;display:block;margin-bottom:8px;
+  animation:sebbyBounce .6s ease-in-out infinite alternate}
+@keyframes sebbyBounce{0%{transform:scale(1) translateY(0)}100%{transform:scale(1.15) translateY(-8px)}}
+.sebby-title{font-family:var(--fh);font-size:32px;color:var(--green);
+  margin-bottom:6px;text-shadow:0 0 20px rgba(57,255,20,.8)}
+.sebby-sub{font-size:16px;color:rgba(255,255,255,.7);margin-bottom:22px}
+.sebby-btn{width:100%;padding:16px;border-radius:16px;border:none;
+  background:linear-gradient(135deg,#39ff14,#00cc00);color:#001a00;
+  font-family:var(--fh);font-size:22px;cursor:pointer;font-weight:900}
+.sebby-btn:active{transform:scale(.96)}
+
+/* Correct answer popup */
+.correct-pop{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,.75);
+  display:none;align-items:center;justify-content:center;padding:20px}
+.correct-pop.on{display:flex}
+.correct-card{background:linear-gradient(145deg,#001020,#002040);
+  border:3px solid #60c0ff;border-radius:28px;padding:32px 24px;
+  width:100%;max-width:360px;text-align:center;
+  box-shadow:0 0 80px rgba(96,192,255,.5);
+  animation:correctPop .5s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes correctPop{
+  0%{transform:scale(0.3);opacity:0}
+  70%{transform:scale(1.1);opacity:1}
+  100%{transform:scale(1);opacity:1}}
+.correct-emoji{font-size:68px;display:block;margin-bottom:8px}
+.correct-title{font-family:var(--fh);font-size:30px;color:#60c0ff;
+  margin-bottom:6px;text-shadow:0 0 20px rgba(96,192,255,.8)}
+.correct-sub{font-size:15px;color:rgba(255,255,255,.7);margin-bottom:22px}
+.correct-btn{width:100%;padding:16px;border-radius:16px;border:none;
+  background:linear-gradient(135deg,#60c0ff,#1d4ed8);color:#fff;
+  font-family:var(--fh);font-size:22px;cursor:pointer}
+.correct-btn:active{transform:scale(.96)}
+
 .pasc{background:linear-gradient(145deg,#07071a,#150530);border:2px solid var(--gold);
   border-radius:24px;padding:32px 22px;width:100%;max-width:390px;text-align:center;
   box-shadow:0 0 55px rgba(255,215,0,.2);animation:pop .38s cubic-bezier(.175,.885,.32,1.275)}
@@ -377,6 +423,26 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
   </div>
 </div>
 
+<!-- ═══ SEBBY POPUP ═══ -->
+<div class="sebby-pop" id="sebbypop">
+  <div class="sebby-card">
+    <span class="sebby-emoji" id="sebby-face">😜</span>
+    <div class="sebby-title">SEBBY BOOST!</div>
+    <div class="sebby-sub" id="sebby-sub">zooms forward 4 spots!</div>
+    <button class="sebby-btn" onclick="closeSebbyPopup()">🚀 Zoom!</button>
+  </div>
+</div>
+
+<!-- ═══ CORRECT ANSWER POPUP ═══ -->
+<div class="correct-pop" id="correctpop">
+  <div class="correct-card">
+    <span class="correct-emoji">🌟</span>
+    <div class="correct-title">BRILLIANT!</div>
+    <div class="correct-sub" id="correct-sub">Roll again for a bonus move!</div>
+    <button class="correct-btn" onclick="closeCorrectPopup()">🎲 Roll Again!</button>
+  </div>
+</div>
+
 <!-- ═══ TRIVIA OVERLAY ═══ -->
 <div class="ov" id="tov">
   <div class="tc">
@@ -430,7 +496,7 @@ const TRIVIA = [
 const RAW = [
   // 7 bands ~82px apart. Launch Pad separated from Spot 1.
   // All 8 planets + sun clear by ≥13px. Zero path crossings. Verified.
-  [28,706],   // 0  Launch Pad (separated from Spot 1 at [68,673])
+  [18,715],   // 0  Launch Pad (well separated from Spot 1 at [68,673])
   [68,673],[116,660],[164,647],[212,660],[260,673],[308,660],        // 1-6   L→R
   [298,583],[260,568],[221,573],[183,588],[145,583],[106,568],[68,573], // 7-13  R←L
   [94,506],[130,492],[165,486],[201,500],[237,506],[272,492],[308,486], // 14-20 L→R
@@ -727,15 +793,36 @@ function renderPath() {
     Ls.appendChild(g);
   }
 
-  // Launch Pad
+  // Launch Pad — drawn as a rocket launch pad
   {
     const {x,y} = ALLPOS[0];
     const g = mk('g');
-    g.appendChild(mk('circle',{cx:x,cy:y,r:'20',fill:'rgba(96,192,255,0.10)'}));
-    g.appendChild(mk('circle',{cx:x,cy:y,r:'17',fill:'#081830',
-      stroke:'#60c0ff','stroke-width':'2.5'}));
-    g.appendChild(txt(x,y-4,'LAUNCH',{'font-size':'7','font-family':'Fredoka One,cursive',fill:'#60c0ff'}));
-    g.appendChild(txt(x,y+5,'PAD',{'font-size':'7','font-family':'Fredoka One,cursive',fill:'#60c0ff'}));
+    // Ground glow
+    g.appendChild(mk('ellipse',{cx:x,cy:y+18,rx:'32',ry:'7',fill:'rgba(96,192,255,0.12)'}));
+    // Launch platform base (wide grey slab)
+    g.appendChild(mk('rect',{x:x-18,y:y+10,width:'36',height:'8',rx:'3',
+      fill:'#3a4060',stroke:'#5060a0','stroke-width':'1'}));
+    // Support legs
+    g.appendChild(mk('rect',{x:x-14,y:y+5,width:'4',height:'8',rx:'1',fill:'#2a3050'}));
+    g.appendChild(mk('rect',{x:x+10,y:y+5,width:'4',height:'8',rx:'1',fill:'#2a3050'}));
+    // Exhaust duct (centre hole in platform)
+    g.appendChild(mk('ellipse',{cx:x,cy:y+11,rx:'5',ry:'3',fill:'#111828'}));
+    // Rocket body on pad
+    g.appendChild(mk('rect',{x:x-5,y:y-14,width:'10',height:'20',rx:'2',fill:'#d8dae8'}));
+    // Rocket nose (triangle top)
+    g.appendChild(mk('polygon',{points:`${x},${y-22} ${x-5},${y-14} ${x+5},${y-14}`,fill:'#c0c4d8'}));
+    // Rocket window
+    g.appendChild(mk('circle',{cx:x,cy:y-8,r:'3',fill:'#4488cc'}));
+    // Rocket left fin
+    g.appendChild(mk('polygon',{points:`${x-5},${y+4} ${x-9},${y+7} ${x-5},${y+3}`,fill:'#cc3030'}));
+    // Rocket right fin
+    g.appendChild(mk('polygon',{points:`${x+5},${y+4} ${x+9},${y+7} ${x+5},${y+3}`,fill:'#cc3030'}));
+    // Exhaust flame wisps
+    g.appendChild(mk('ellipse',{cx:x-3,cy:y+16,rx:'2.5',ry:'4',fill:'rgba(255,160,40,0.7)'}));
+    g.appendChild(mk('ellipse',{cx:x+3,cy:y+17,rx:'2',ry:'3.5',fill:'rgba(255,200,60,0.6)'}));
+    // "LAUNCH PAD" label
+    g.appendChild(txt(x,y+30,'LAUNCH PAD',{'font-size':'6.5','font-family':'Fredoka One,cursive',
+      'text-anchor':'middle',fill:'rgba(96,192,255,0.9)'}));
     Ls.appendChild(g);
   }
 
@@ -960,11 +1047,11 @@ function procRoll(r) {
   const bh=pendBH; pendBH=false;
   if (bh) {
     setMsg(p.piece+' Black Hole pulls back '+r+' spaces! 😱');
-    animMove(p,Math.max(0,p.pos-r),()=>chkLand(p,false));
+    animMove(p,Math.max(0,p.pos-r),()=>chkLand(p,true));  // afterSetback=true
   } else {
     let np=p.pos+r; if(np>=51) np=51;
     setMsg(p.piece+' '+p.name+' rolled '+r+'! Moving…');
-    animMove(p,np,()=>chkLand(p,true));
+    animMove(p,np,()=>chkLand(p,false));  // afterSetback=false — check specials
   }
 }
 
@@ -975,31 +1062,105 @@ function animMove(p,target,cb) {
     if (s>=steps) { cb(); return; }
     s++; p.pos+=dir;
     renderPieces(); updChips();
-    setTimeout(tick,105);
+    setTimeout(tick,220);
   }
   tick();
 }
 
-function chkLand(p,normal) {
+function chkLand(p, afterSetback) {
+  // afterSetback=true means we just moved backward from a BH — no re-trigger
   if (p.pos>=51) { p.pos=51; renderPieces(); setTimeout(()=>winGame(p),500); return; }
   const type=SP[p.pos];
-  if (normal && type==='sb') {
-    setMsg('🌟 Sebby Boost! '+p.piece+' zooms +4!');
-    setTimeout(()=>{
-      const np=Math.min(51,p.pos+4);
-      animMove(p,np,()=>np>=51?winGame(p):endTurn());
-    },750);
-  } else if (normal && type==='bh') {
+  if (!afterSetback && type==='sb') {
+    showSebbyPopup(p);
+  } else if (!afterSetback && type==='bh') {
     setMsg('⚫ Black Hole! '+p.piece+' must roll and go BACK!');
     pendBH=true;
     setTimeout(()=>{
       document.getElementById('rb').disabled=false;
       document.getElementById('rb').innerHTML='⚫ Roll to Escape!';
     },850);
-  } else if (normal && type==='nb') {
+  } else if (!afterSetback && type==='nb') {
     setMsg('🌌 Nebula Card! Answer correctly to roll again!');
     setTimeout(()=>showTrivia(p),750);
   } else { endTurn(); }
+}
+
+// ── Zoom sound (Web Audio API) ──
+function playZoom() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Rising whoosh
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(80, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
+    // Second layer — sparkle
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.connect(gain2); gain2.connect(ctx.destination);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(400, ctx.currentTime + 0.1);
+    osc2.frequency.exponentialRampToValueAtTime(2400, ctx.currentTime + 0.45);
+    gain2.gain.setValueAtTime(0.15, ctx.currentTime + 0.1);
+    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc2.start(ctx.currentTime + 0.1);
+    osc2.stop(ctx.currentTime + 0.55);
+  } catch(e) {}
+}
+
+// ── Correct answer chime ──
+function playCorrect() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [523, 659, 784, 1047].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.12;
+      gain.gain.setValueAtTime(0.2, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      osc.start(t); osc.stop(t + 0.35);
+    });
+  } catch(e) {}
+}
+
+let sebbyPlayer = null;
+function showSebbyPopup(p) {
+  sebbyPlayer = p;
+  playZoom();
+  document.getElementById('sebby-face').textContent = p.piece;
+  document.getElementById('sebby-sub').textContent = p.name + ' zooms forward 4 spots!';
+  document.getElementById('sebbypop').classList.add('on');
+}
+function closeSebbyPopup() {
+  document.getElementById('sebbypop').classList.remove('on');
+  const p = sebbyPlayer;
+  if (!p) return;
+  setMsg('🌟 Sebby Boost! ' + p.piece + ' zooms +4!');
+  const np = Math.min(51, p.pos + 4);
+  animMove(p, np, () => np >= 51 ? winGame(p) : endTurn());
+}
+
+let correctCallback = null;
+function showCorrectPopup(piece, name, cb) {
+  playCorrect();
+  correctCallback = cb;
+  document.getElementById('correct-sub').textContent = name + ' rolls again for a bonus move!';
+  document.getElementById('correctpop').classList.add('on');
+}
+function closeCorrectPopup() {
+  document.getElementById('correctpop').classList.remove('on');
+  if (correctCallback) correctCallback();
+  correctCallback = null;
 }
 
 function endTurn() {
@@ -1051,11 +1212,11 @@ function ansTrivia(idx,btn) {
   setTimeout(()=>{
     document.getElementById('tov').classList.remove('on'); trivOn=false;
     if (ok) {
-      setMsg('✅ Correct! '+trivRef.piece+' rolls again!');
-      setTimeout(()=>{
+      showCorrectPopup(trivRef.piece, trivRef.name, () => {
+        setMsg('🎲 ' + trivRef.name + ' rolls again! Bonus!');
         document.getElementById('rb').disabled=false;
         document.getElementById('rb').innerHTML='🎲 Roll Again! (Bonus!)';
-      },600);
+      });
     } else {
       setMsg('❌ Not quite! '+trivRef.piece+' stays on Spot '+trivRef.pos+'.');
       setTimeout(()=>endTurn(),1100);
