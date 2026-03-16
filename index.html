@@ -1201,20 +1201,42 @@ function rollDice() {
 }
 
 function procRoll(r) {
-  rolling=false;
+  // Keep rolling=true until animMove finishes so no stray taps fire during movement
   const p=players[curIdx];
   const bh=pendBH; pendBH=false;
   if (bh) {
     const bhTarget = Math.max(0, p.pos - r);
     setMsg(p.piece+' dragged back '+r+' spot'+(r===1?'':'s')+'! 😱');
     animMove(p, bhTarget, () => {
+      rolling=false;
       showBHEscapePopup(p, r, () => chkLand(p, true));
-    });  // afterSetback=true
+    });
   } else {
     let np=p.pos+r; if(np>=51) np=51;
     setMsg(p.piece+' '+p.name+' rolled '+r+'! Moving…');
-    animMove(p,np,()=>chkLand(p,false));  // afterSetback=false — check specials
+    animMove(p, np, () => {
+      rolling=false;
+      chkLand(p, false);
+    });
   }
+}
+
+// ── Step sound — short space blip per movement increment ──
+function playStep(dir) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    // Forward: ascending blip; backward (BH): descending blip
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(dir > 0 ? 520 : 280, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(dir > 0 ? 740 : 180, ctx.currentTime + 0.07);
+    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.10);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.12);
+  } catch(e) {}
 }
 
 function animMove(p,target,cb) {
@@ -1223,6 +1245,7 @@ function animMove(p,target,cb) {
   function tick() {
     if (s>=steps) { cb(); return; }
     s++; p.pos+=dir;
+    playStep(dir);
     renderPieces(); updChips();
     setTimeout(tick,220);
   }
@@ -1328,10 +1351,16 @@ function showBHPopup(p) {
 }
 function closeBHPopup() {
   document.getElementById('bhpop').classList.remove('on');
-  setMsg('⚫ Roll to escape the Black Hole!');
+  // Reset all guards that could block the escape roll
+  rolling = false;
+  trivOn = false;
   pendBH = true;
-  document.getElementById('rb').disabled = false;
-  document.getElementById('rb').innerHTML = '⚫ Roll to Escape!';
+  setMsg('⚫ Roll to escape the Black Hole!');
+  const rb = document.getElementById('rb');
+  rb.disabled = false;
+  rb.innerHTML = '⚫ Roll to Escape!';
+  // Remove and re-add onclick to ensure fresh handler (avoids any stale state)
+  rb.onclick = function() { rollDice(); };
 }
 
 let bhEscapeCallback = null;
@@ -1455,8 +1484,10 @@ function computerTakeTurn() {
 }
 
 function endTurn() {
-  document.getElementById('rb').innerHTML='🎲 Roll the Dice!';
-  document.getElementById('rb').disabled=false;
+  const rb = document.getElementById('rb');
+  rb.innerHTML='🎲 Roll the Dice!';
+  rb.disabled=false;
+  rb.onclick = function(){ rollDice(); }; // always restore normal handler
   curIdx=(curIdx+1)%players.length;
   updateHUD(); updChips(); renderPieces();
   const nx=players[curIdx];
@@ -1482,8 +1513,10 @@ function closePO() {
   document.getElementById('pov').classList.remove('on');
   const p=players[curIdx];
   setMsg(p.piece+' '+p.name+"'s turn! Roll! 🎲");
-  document.getElementById('rb').disabled=false;
-  document.getElementById('rb').innerHTML='🎲 Roll the Dice!';
+  const rb = document.getElementById('rb');
+  rb.disabled=false;
+  rb.innerHTML='🎲 Roll the Dice!';
+  rb.onclick = function(){ rollDice(); };
 }
 
 let trivRef=null, trivDone=false;
