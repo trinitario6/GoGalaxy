@@ -1239,15 +1239,21 @@ function procRoll(r) {
   }
 }
 
-// ── Shared AudioContext — created once on first use ──
+// ── Shared AudioContext — created once on first user gesture ──
 let _audioCtx = null;
 function getAudioCtx() {
   if (!_audioCtx) {
-    _audioCtx = getAudioCtx();
+    _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
   if (_audioCtx.state === 'suspended') _audioCtx.resume();
   return _audioCtx;
 }
+
+// Warm up AudioContext on first tap anywhere so sounds work immediately
+document.addEventListener('touchend', function _warmup() {
+  getAudioCtx();
+  document.removeEventListener('touchend', _warmup);
+}, {once: true, passive: true});
 
 // ── Step sound — space blip per movement increment ──
 function playStep(dir) {
@@ -1277,7 +1283,7 @@ function animMove(p,target,cb) {
     s++; p.pos+=dir;
     playStep(dir);
     renderPieces(); updChips();
-    setTimeout(tick,220);
+    setTimeout(tick,350);
   }
   tick();
 }
