@@ -152,10 +152,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
 .bw-inner{width:100%;transform-origin:top center}
 #bsvg{width:100%;height:auto;display:block;border-radius:14px}
 
-.aa{width:100%;padding:0 10px 6px;flex-shrink:0}
-.dd{text-align:center;font-size:44px;height:50px;
-  display:flex;align-items:center;justify-content:center}
-.dd.r{animation:dr .55s ease-out}
+.aa{width:100%;padding:0 10px 4px;flex-shrink:0}
 .mb{background:var(--card);border:1px solid var(--brd);border-radius:12px;
   padding:7px 12px;text-align:center;font-weight:700;font-size:13px;
   margin-bottom:7px;min-height:36px;display:flex;align-items:center;justify-content:center;line-height:1.3}
@@ -417,7 +414,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
       <ellipse cx="150" cy="550" rx="76" ry="32" fill="#701040" opacity=".07"/>
       <ellipse cx="46" cy="450" rx="40" ry="55" fill="#201060" opacity=".08"/>
       <ellipse cx="335" cy="530" rx="44" ry="36" fill="#003030" opacity=".08"/>
-      <ellipse cx="188" cy="40" rx="68" ry="22" fill="#102040" opacity=".07"/>
+      <ellipse cx="320" cy="58" rx="45" ry="18" fill="#102040" opacity=".07"/>
       <ellipse cx="170" cy="420" rx="60" ry="28" fill="#0a1040" opacity=".08"/>
       <!-- bg stars -->
       <g opacity=".52">
@@ -453,7 +450,6 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
     </div><!-- /bw-inner -->
   </div>
   <div class="aa">
-    <div class="dd" id="dd">🎲</div>
     <div class="mb" id="mb">Tap the dice to roll!</div>
     <button class="rb" id="rb" onclick="rollDice()">🎲 Roll the Dice!</button>
   </div>
@@ -541,7 +537,7 @@ const DICE = ['⚀','⚁','⚂','⚃','⚄','⚅'];
 
 const SP = {};
 [8,17,26,35,43].forEach(s => SP[s] = 'bh');
-[5,14,22,31,40,47].forEach(s => SP[s] = 'sb');
+[5,14,22,31,40].forEach(s => SP[s] = 'sb');
 [4,10,16,20,25,29,33,38,44,48].forEach(s => SP[s] = 'nb');
 
 const SEBBY = 'data:image/jpeg;base64,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';
@@ -594,31 +590,30 @@ const TRIVIA = [
 // BOARD POSITIONS  (viewBox 380×720)
 // ════════════════════════════════════
 const RAW = [
-  // 7 bands ~82px apart. Launch Pad separated from Spot 1.
-  // All 8 planets + sun clear by ≥13px. Zero path crossings. Verified.
-  [18,545],   // 0  Launch Pad (well separated from Spot 1 at [68,513])
-  [68,513],[116,503],[164,493],[212,503],[260,513],[308,503],        // 1-6   L→R
-  [298,444],[260,433],[221,437],[183,448],[145,444],[106,433],[68,437], // 7-13  R←L
-  [94,386],[130,375],[165,370],[201,381],[237,386],[272,375],[308,370], // 14-20 L→R
-  [278,322],[247,310],[217,309],[186,322],[156,322],[125,310],[95,309],[64,322], // 21-28 R←L
-  [64,262],[105,252],[145,245],[186,255],[227,262],[267,252],[308,245], // 29-35 L→R
-  [308,197],[281,188],[254,185],[228,194],[201,197],[174,188],[148,185],[121,194],[94,197], // 36-44 R←L
-  [68,135],[116,126],[164,121],[212,130],[260,135],[308,126],          // 45-50 L→R
-  [192,55]    // 51  FINISH — Alpha Centauri
+  // 7 evenly-spaced rows (65px apart), spots spread x=72–314, wave ±8px
+  [18,545],   // 0  Launch Pad
+  [72,481],[120,486],[169,489],[217,489],[266,486],[314,481],          // 1-6   L→R
+  [314,416],[274,420],[233,423],[193,424],[153,423],[112,420],[72,416], // 7-13  R←L
+  [72,352],[112,356],[153,359],[193,360],[233,359],[274,356],[314,352], // 14-20 L→R
+  [314,288],[279,291],[245,294],[210,296],[176,296],[141,294],[107,291],[72,288], // 21-28 R←L
+  [72,223],[112,227],[153,230],[193,231],[233,230],[274,227],[314,223], // 29-35 L→R
+  [314,159],[284,162],[254,165],[223,166],[193,167],[163,166],[132,165],[102,162],[72,159], // 36-44 R←L
+  [72,94],[120,99],[169,102],[217,102],[266,99],[314,94],              // 45-50 L→R
+  [338,30]    // 51  FINISH — Alpha Centauri
 ];
 const ALLPOS = RAW.map(([x,y]) => ({x,y}));
 
 const PLANETS = [
-  {x:192,y:530,r:28, type:'sun'},        // below all bands, bottom centre
-  {x:50, y:486,r:7,  type:'mercury'},    // left, band1 zone (tiny)
-  {x:42, y:408,r:22, type:'jupiter'},    // left between band2-3 (open space)
-  {x:340,y:406,r:10, type:'earth'},      // right between band2-3
-  {x:340,y:347,r:13, type:'venus'},      // right between band3-4
-  {x:50, y:284,r:10, type:'mars'},       // left between band4-5
-  {x:348,y:255,r:20, type:'saturn', rx:30, ry:5}, // right between band4-5
-  {x:50, y:159,r:15, type:'uranus'},     // left between band6-7
-  {x:330,y:159,r:13, type:'neptune'},    // right between band6-7
-  {x:145,y:60,       type:'comet'},      // upper area
+  {x:192,y:572,r:38, type:'sun'},        // bottom edge segment
+  {x:52, y:448,r:7,  type:'mercury'},    // left between row1-2
+  {x:28, y:384,r:10, type:'earth'},      // left between row2-3
+  {x:352,y:384,r:13, type:'venus'},      // right between row2-3 (closer to sun)
+  {x:352,y:320,r:10, type:'mars'},       // right between row3-4
+  {x:28, y:256,r:22, type:'jupiter'},    // left between row4-5 (further from sun)
+  {x:352,y:256,r:20, type:'saturn', rx:30, ry:5}, // right between row4-5
+  {x:38, y:126,r:15, type:'uranus'},     // left between row6-7
+  {x:342,y:126,r:13, type:'neptune'},    // right between row6-7
+  {x:28, y:36,       type:'comet'},      // upper-left
 ];
 
 // ════════════════════════════════════
@@ -881,8 +876,8 @@ function renderPath() {
     let d = `M${pts[0].x},${pts[0].y}`;
     for (let i=1; i<pts.length; i++) {
       const p0=pts[i-2]||pts[i-1], p1=pts[i-1], p2=pts[i], p3=pts[i+1]||pts[i];
-      const c1x=p1.x+(p2.x-p0.x)*0.40, c1y=p1.y+(p2.y-p0.y)*0.40;
-      const c2x=p2.x-(p3.x-p1.x)*0.40, c2y=p2.y-(p3.y-p1.y)*0.40;
+      const c1x=p1.x+(p2.x-p0.x)*0.30, c1y=p1.y+(p2.y-p0.y)*0.30;
+      const c2x=p2.x-(p3.x-p1.x)*0.30, c2y=p2.y-(p3.y-p1.y)*0.30;
       d += ` C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2.x},${p2.y}`;
     }
     return d;
@@ -1034,10 +1029,18 @@ function renderPlanets() {
     const g = mk('g');
 
     if (p.type === 'sun') {
-      [52,40,28].forEach((cr,i) => g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:cr,fill:`rgba(255,${100+i*30},0,${0.04+i*0.03})`})));
-      g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'url(#sunG)',filter:'url(#sunF)'}));
-      g.appendChild(mk('circle',{cx:p.x+8,cy:p.y-7,r:'4',fill:'rgba(150,45,0,0.35)'}));
-      autoLbl(g, p.x, p.r, p.y+p.r+11, '8.5', 'rgba(255,200,60,0.65)', 'Sun');
+      // Clip to SVG height so only top segment shows — like sunrise at bottom edge
+      const defs2 = document.getElementById('bsvg').querySelector('defs');
+      if (!defs2.querySelector('#sunClip')) {
+        const cp = mk('clipPath',{id:'sunClip'});
+        cp.appendChild(mk('rect',{x:'0',y:'0',width:'380',height:'560'}));
+        defs2.appendChild(cp);
+      }
+      const sg = mk('g',{'clip-path':'url(#sunClip)'});
+      [72,58,45].forEach((cr,i) => sg.appendChild(mk('circle',{cx:p.x,cy:p.y,r:cr,fill:`rgba(255,${100+i*30},0,${0.04+i*0.03})`})));
+      sg.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'url(#sunG)',filter:'url(#sunF)'}));
+      g.appendChild(sg);
+      // No label — sun is just decorative at bottom
 
     } else if (p.type === 'mercury') {
       g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#a08878'}));
@@ -1067,7 +1070,7 @@ function renderPlanets() {
       g.appendChild(mk('circle',{cx:p.x,cy:p.y,r:p.r,fill:'#c8a06a'}));
       [-8,-3,3,8].forEach(dy => g.appendChild(mk('ellipse',{cx:p.x,cy:p.y+dy,rx:p.r,ry:'3',fill:dy===-3?'rgba(148,48,18,0.44)':'rgba(80,40,10,0.20)'})));
       g.appendChild(mk('ellipse',{cx:p.x+8,cy:p.y-2,rx:'6',ry:'4',fill:'rgba(175,55,35,0.55)'}));
-      autoLbl(g, p.x, p.r, p.y+p.r+11, '8.5', 'rgba(200,160,80,0.70)', 'Jupiter');
+      lbl(g, p.x+p.r+5, p.y+3, 'start', '8.5', 'rgba(200,160,80,0.70)', 'Jupiter');
 
     } else if (p.type === 'saturn') {
       const rx = p.rx || 30, ry = p.ry || 7;
@@ -1183,18 +1186,15 @@ let rolling=false;
 function rollDice() {
   if (rolling||trivOn) return;
   rolling=true;
-  document.getElementById('rb').disabled=true;
-  const de=document.getElementById('dd');
-  de.classList.remove('r');
-  void de.offsetWidth;
-  de.classList.add('r');
+  const rb=document.getElementById('rb');
+  rb.disabled=true;
   let n=0;
   const iv=setInterval(()=>{
-    de.textContent=DICE[Math.floor(Math.random()*6)]; n++;
+    rb.innerHTML=DICE[Math.floor(Math.random()*6)]+' Rolling…'; n++;
     if (n>=10) {
-      clearInterval(iv); de.classList.remove('r');
+      clearInterval(iv);
       const r=Math.floor(Math.random()*6)+1;
-      de.textContent=DICE[r-1];
+      rb.innerHTML=DICE[r-1]+' Rolled a '+(r)+'!';
       setTimeout(()=>procRoll(r),280);
     }
   },72);
@@ -1626,7 +1626,7 @@ function confetti() {
 // ════════════════════════════════════
 function resetGame() {
   gameOn=trivOn=pendBH=false; players=[]; curIdx=0;
-  document.getElementById('dd').textContent='🎲';
+  
   showSc('ss');
   renderNames();
 }
