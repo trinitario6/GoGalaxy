@@ -611,7 +611,7 @@ const ALLPOS = RAW.map(([x,y]) => ({x,y}));
 const PLANETS = [
   {x:192,y:530,r:28, type:'sun'},        // below all bands, bottom centre
   {x:50, y:486,r:7,  type:'mercury'},    // left, band1 zone (tiny)
-  {x:192,y:474,r:22, type:'jupiter'},    // centre between band1-2
+  {x:42, y:408,r:22, type:'jupiter'},    // left between band2-3 (open space)
   {x:340,y:406,r:10, type:'earth'},      // right between band2-3
   {x:340,y:347,r:13, type:'venus'},      // right between band3-4
   {x:50, y:284,r:10, type:'mars'},       // left between band4-5
@@ -881,8 +881,8 @@ function renderPath() {
     let d = `M${pts[0].x},${pts[0].y}`;
     for (let i=1; i<pts.length; i++) {
       const p0=pts[i-2]||pts[i-1], p1=pts[i-1], p2=pts[i], p3=pts[i+1]||pts[i];
-      const c1x=p1.x+(p2.x-p0.x)*0.18, c1y=p1.y+(p2.y-p0.y)*0.18;
-      const c2x=p2.x-(p3.x-p1.x)*0.18, c2y=p2.y-(p3.y-p1.y)*0.18;
+      const c1x=p1.x+(p2.x-p0.x)*0.40, c1y=p1.y+(p2.y-p0.y)*0.40;
+      const c2x=p2.x-(p3.x-p1.x)*0.40, c2y=p2.y-(p3.y-p1.y)*0.40;
       d += ` C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2.x},${p2.y}`;
     }
     return d;
