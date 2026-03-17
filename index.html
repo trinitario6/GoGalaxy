@@ -591,7 +591,7 @@ const TRIVIA = [
 // ════════════════════════════════════
 const RAW = [
   // 7 evenly-spaced rows (65px apart), spots spread x=72–314, wave ±8px
-  [18,545],   // 0  Launch Pad
+  [38,528],   // 0  Launch Pad
   [72,481],[120,486],[169,489],[217,489],[266,486],[314,481],          // 1-6   L→R
   [314,416],[274,420],[233,423],[193,424],[153,423],[112,420],[72,416], // 7-13  R←L
   [72,352],[112,356],[153,359],[193,360],[233,359],[274,356],[314,352], // 14-20 L→R
@@ -824,7 +824,12 @@ function startGame() {
     setMsg('🤖 Computer goes first!');
     setTimeout(() => computerTakeTurn(), 1000);
   } else {
-    setMsg(firstP.piece+' '+firstP.name+' goes first! Roll!');
+    const humanCnt = players.filter(p => !isComputer(p)).length;
+    if (humanCnt <= 1) {
+      setMsg(firstP.piece + ' Your turn, ' + firstP.name + '! Roll! 🎲');
+    } else {
+      setMsg(firstP.piece+' '+firstP.name+' goes first! Roll!');
+    }
   }
 }
 
@@ -1111,9 +1116,22 @@ function renderPieces() {
 
   Object.entries(pm).forEach(([idx,ps]) => {
     const bp = ALLPOS[+idx] || ALLPOS[0];
+    // Stagger offsets so Launch Pad pieces don't stack
+    const lpOffsets = {
+      1:[[0,0]],
+      2:[[-9,0],[9,0]],
+      3:[[0,-8],[-9,5],[9,5]],
+      4:[[-8,-6],[8,-6],[-8,6],[8,6]]
+    };
     ps.forEach((p,i) => {
-      const ox = (i-(ps.length-1)/2)*13;
-      const px=bp.x+ox, py=bp.y;
+      const isLP = (+idx === 0);
+      let ox, oy;
+      if (isLP && lpOffsets[ps.length]) {
+        [ox, oy] = lpOffsets[ps.length][i] || [0,0];
+      } else {
+        ox = (i-(ps.length-1)/2)*13; oy = 0;
+      }
+      const px=bp.x+ox, py=bp.y+oy;
 
       Lpi.appendChild(mk('ellipse',{cx:px,cy:py+13,rx:'7',ry:'2.5',fill:'rgba(0,0,0,0.42)'}));
       if (p.id === players[curIdx].id) {
@@ -1507,8 +1525,14 @@ function endTurn() {
     setMsg('🤖 Computer turn…');
     setTimeout(() => computerTakeTurn(), 800);
   } else {
-    setMsg('Pass to '+nx.piece+' '+nx.name+'!');
-    setTimeout(()=>showPO(nx),580);
+    // In 1-player mode (only one human) skip pass overlay, just prompt
+    const humanCount = players.filter(p => !isComputer(p)).length;
+    if (humanCount <= 1) {
+      setMsg(nx.piece + ' Your turn, ' + nx.name + '! Roll! 🎲');
+    } else {
+      setMsg('Pass to ' + nx.piece + ' ' + nx.name + '!');
+      setTimeout(() => showPO(nx), 580);
+    }
   }
 }
 
