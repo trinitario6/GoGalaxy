@@ -128,11 +128,6 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
   border:1px solid var(--brd);border-radius:24px;padding:5px 13px;font-weight:800;font-size:14px}
 .tp{font-size:19px}
 .tn{max-width:85px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ctb{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--brd);
-  background:var(--card);color:#fff;font-size:15px;cursor:pointer;
-  display:inline-flex;align-items:center;justify-content:center;
-  -webkit-appearance:none}
-.ctb.on{border-color:var(--gold);background:rgba(255,215,0,.18);box-shadow:0 0 10px rgba(255,215,0,.32)}
 
 .chips{width:100%;padding:3px 10px;display:flex;gap:6px;overflow-x:auto;
   scrollbar-width:none;flex-shrink:0;-webkit-overflow-scrolling:touch}
@@ -341,6 +336,14 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
     <div id="pnames"></div>
   </div>
 
+  <div class="scard">
+    <h2>🎯 Difficulty</h2>
+    <div class="cnt-row">
+      <button class="cb sel" id="mode-explorer" onclick="setMode('explorer')" style="width:auto;padding:0 14px;font-size:13px;font-family:var(--fb)">🌱 Explorer</button>
+      <button class="cb" id="mode-challenger" onclick="setMode('challenger')" style="width:auto;padding:0 14px;font-size:13px;font-family:var(--fb)">🔥 Challenger</button>
+    </div>
+  </div>
+
   <button class="go-btn" onclick="startGame()">🌟 Launch Mission!</button>
 </div>
 
@@ -349,8 +352,7 @@ html,body{height:100%;background:#060614;color:#fff9f0;font-family:var(--fb)}
   <div class="hud">
     <div class="ht">🚀 Go Galaxy</div>
     <div class="hr">
-      <button class="ctb on" id="ctb" onclick="toggleCO()">👁️</button>
-      <div class="ti">
+<div class="ti">
         <span class="tp" id="hp">🚀</span>
         <span class="tn" id="hn">Player</span>
       </div>
@@ -586,6 +588,52 @@ const TRIVIA = [
   {q:"What is the name of the galaxy closest to our Milky Way?", opts:["Triangulum","Whirlpool","Andromeda","Sombrero"], a:2},
 ];
 
+
+const TRIVIA_HARD = [
+  {q:"What is the Schwarzschild radius of a black hole?", opts:["The point of no return","The spin rate","The mass of the black hole","The distance to the nearest star"], a:0},
+  {q:"Which moon of Saturn has a thick nitrogen atmosphere?", opts:["Enceladus","Rhea","Titan","Iapetus"], a:2},
+  {q:"What phenomenon causes the outer layers of a star to blow away, forming a planetary nebula?", opts:["Supernova","Stellar wind from a red giant","Gamma-ray burst","Neutron star collision"], a:1},
+  {q:"What is the name of the force that causes the universe to expand at an accelerating rate?", opts:["Dark matter","Gravity","Dark energy","Electromagnetic force"], a:2},
+  {q:"Which space telescope was launched in 2021 to replace Hubble?", opts:["Chandra","James Webb","Spitzer","Kepler"], a:1},
+  {q:"What is a pulsar?", opts:["A type of black hole","A rapidly rotating neutron star emitting beams of radiation","A star that pulses in brightness","A galaxy nucleus"], a:1},
+  {q:"Approximately how old is our universe?", opts:["4.6 billion years","13.8 billion years","100 billion years","1 billion years"], a:1},
+  {q:"What is the Oort Cloud?", opts:["A nebula near Earth","A distant spherical shell of icy bodies around the solar system","A type of galaxy","Clouds of gas around Jupiter"], a:1},
+  {q:"Which planet has a hexagonal storm at its north pole?", opts:["Jupiter","Uranus","Saturn","Neptune"], a:2},
+  {q:"What is a light-year?", opts:["The age of the universe in years","The distance light travels in one year","The brightness of a star","The speed of light divided by gravity"], a:1},
+  {q:"What causes a solar eclipse?", opts:["Earth passes between the Sun and Moon","The Moon passes between Earth and the Sun","A cloud of dust blocks the Sun","The Sun dims temporarily"], a:1},
+  {q:"What is the name of the closest star system to our Sun?", opts:["Barnard's Star","Sirius","Alpha Centauri","Vega"], a:2},
+  {q:"Which planet has the longest day (slowest rotation) in our solar system?", opts:["Mercury","Venus","Mars","Pluto"], a:1},
+  {q:"What is a magnetar?", opts:["A planet with a strong magnetic field","A neutron star with an extremely powerful magnetic field","A type of asteroid","A magnetic comet"], a:1},
+  {q:"What was the first artificial satellite launched into space?", opts:["Explorer 1","Luna 1","Sputnik 1","Vostok 1"], a:2},
+  {q:"What is the name for the boundary around a black hole beyond which nothing can escape?", opts:["The photon sphere","The ergosphere","The event horizon","The singularity"], a:2},
+  {q:"Which moon of Jupiter is considered the most volcanically active body in the solar system?", opts:["Europa","Ganymede","Io","Callisto"], a:2},
+  {q:"What is stellar nucleosynthesis?", opts:["The formation of planets around stars","The process by which stars create chemical elements","How stars measure their mass","The birth of new stars in nebulae"], a:1},
+  {q:"What type of galaxy is the Milky Way?", opts:["Elliptical","Irregular","Lenticular","Barred spiral"], a:3},
+  {q:"What is the cosmic microwave background radiation?", opts:["Radiation from quasars","Leftover radiation from the Big Bang","Radiation from neutron stars","Solar wind particles"], a:1},
+  {q:"Which spacecraft made the first successful landing on Mars?", opts:["Viking 1","Curiosity","Spirit","Mariner 9"], a:0},
+  {q:"What is the Great Attractor?", opts:["The largest black hole","A gravitational anomaly pulling the Milky Way","Jupiter's magnetic field","The centre of our galaxy"], a:1},
+  {q:"What is the Roche limit?", opts:["The speed needed to escape a planet","The maximum distance a moon can orbit","The minimum distance before tidal forces break apart a moon","The temperature at which a star explodes"], a:2},
+  {q:"Which element is most abundant in the universe?", opts:["Helium","Carbon","Oxygen","Hydrogen"], a:3},
+  {q:"What is a quasar?", opts:["A type of asteroid","An extremely luminous active galactic nucleus","A star that wobbles","A type of pulsar"], a:1},
+  {q:"What is the Parker Solar Probe's main mission?", opts:["Land on the Sun","Study the Sun's corona and solar wind","Map the asteroid belt","Observe distant galaxies"], a:1},
+  {q:"What does NASA's acronym stand for?", opts:["National Aeronautics and Space Administration","North American Space Agency","National Aerospace Science Academy","New Aeronautics and Space Association"], a:0},
+  {q:"What is the Hubble constant used to measure?", opts:["The age of stars","The rate of expansion of the universe","The brightness of galaxies","The distance to the Moon"], a:1},
+  {q:"Which mission first landed humans on the Moon?", opts:["Apollo 10","Gemini 12","Apollo 11","Apollo 13"], a:2},
+  {q:"What are brown dwarfs?", opts:["Failed stars too small to sustain nuclear fusion","Old red stars cooling down","Planets larger than Jupiter","Black holes in disguise"], a:0},
+  {q:"What is the heliosphere?", opts:["The visible surface of the Sun","The region dominated by solar wind","The Sun's corona","The zone between Mercury and Venus"], a:1},
+  {q:"Which moon of Saturn shoots geysers of water vapour into space?", opts:["Titan","Dione","Enceladus","Mimas"], a:2},
+  {q:"What is a Dyson sphere (hypothetically)?", opts:["A space station orbiting Mars","A megastructure capturing all energy from a star","A type of wormhole","A black hole detector"], a:1},
+  {q:"What causes auroras (Northern/Southern Lights)?", opts:["Sunlight reflecting off polar ice","Solar wind particles interacting with Earth's magnetic field","Lightning from upper atmosphere","Meteor showers near the poles"], a:1},
+  {q:"What is the Chandrasekhar limit?", opts:["The maximum mass of a white dwarf star","The minimum mass of a neutron star","The distance light bends around a black hole","The speed needed to leave the solar system"], a:0},
+  {q:"Which planet was reclassified as a dwarf planet in 2006?", opts:["Ceres","Eris","Pluto","Makemake"], a:2},
+  {q:"What is spaghettification?", opts:["How pasta forms in zero gravity","The stretching of matter falling into a black hole","A type of galaxy collision","How stars shed their outer layers"], a:1},
+  {q:"What percentage of the universe is ordinary matter?", opts:["About 5%","About 27%","About 68%","About 50%"], a:0},
+  {q:"What is the name of the supermassive black hole at the centre of our galaxy?", opts:["Cygnus X-1","M87*","Sagittarius A*","NGC 1277"], a:2},
+  {q:"What is a nebula?", opts:["A type of galaxy","A dying star","A cloud of gas and dust in space","A rogue planet"], a:2},
+];
+
+let gameMode = 'explorer'; // 'explorer' or 'challenger'
+
 // ════════════════════════════════════
 // BOARD POSITIONS  (viewBox 380×720)
 // ════════════════════════════════════
@@ -621,12 +669,21 @@ const PLANETS = [
 // ════════════════════════════════════
 let players=[], curIdx=0, gameOn=false;
 let trivOn=false, curQ=null, pendBH=false;
-let showCO=true, pCount=1;
+let pCount=1;
 const selP = {}; // populated lazily by renderNames
 let trivDeck=[], trivDeckIdx=0;
 
+function setMode(mode) {
+  gameMode = mode;
+  ['explorer','challenger'].forEach(m => {
+    const b = document.getElementById('mode-' + m);
+    if (b) b.classList.toggle('sel', m === mode);
+  });
+}
+
 function shuffleDeck() {
-  trivDeck = TRIVIA.slice();
+  const pool = gameMode === 'challenger' ? TRIVIA_HARD : TRIVIA;
+  trivDeck = pool.slice();
   for (let i=trivDeck.length-1; i>0; i--) {
     const j = Math.floor(Math.random()*(i+1));
     [trivDeck[i],trivDeck[j]] = [trivDeck[j],trivDeck[i]];
@@ -811,9 +868,9 @@ function startGame() {
     const cpIdx = APC.findIndex(p => !players.some(pl => pl.piece === p));
     players.push({name:'Computer', piece: cpIdx >= 0 ? APC[cpIdx] : '🤖', color:PCOLS[1], pos:0, id:1});
   }
-  curIdx=0; gameOn=true; pendBH=false; showCO=true;
+  curIdx=0; gameOn=true; pendBH=false;
   shuffleDeck(); // fresh randomised question order every game
-  document.getElementById('ctb').classList.add('on');
+  
   showSc('bs');
   renderBoard(); renderChips(); updateHUD();
   document.getElementById('rb').disabled = false;
@@ -844,11 +901,6 @@ function showSc(id) {
   if (id === 'ss') document.getElementById('ss').scrollTop = 0;
 }
 
-function toggleCO() {
-  showCO = !showCO;
-  document.getElementById('ctb').classList.toggle('on', showCO);
-  renderPieces();
-}
 
 // ════════════════════════════════════
 // SVG HELPERS
@@ -1142,7 +1194,7 @@ function renderPieces() {
       t.textContent = p.piece;
       Lpi.appendChild(t);
 
-      if (showCO) {
+      if (true) {
         const nm = p.name.length>9 ? p.name.slice(0,8)+'…' : p.name;
         const bW=nm.length*7.4+16, bH=20;
         const bx=px-bW/2, by=py-34;
